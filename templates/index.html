@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Mouse</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+            margin-top: 5px;
+        }
+        #controls {
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        select {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #stopButton {
+            background-color: #dc3545;
+        }
+        #stopButton:hover {
+            background-color: #c82333;
+        }
+        #videoContainer {
+            display: none;
+            margin-top: 20px;
+        }
+        img {
+            border-radius: 10px;
+        }
+        #logo {
+            max-width: 150px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <script>
+        function startStream() {
+            const webcamSelect = document.getElementById('webcamSelect');
+            const webcamIndex = webcamSelect.value;
+            fetch(`/start?webcam=${webcamIndex}`).then(() => {
+                document.getElementById('videoContainer').style.display = 'block';
+                document.getElementById('videoFeed').src = `/video_feed?webcam=${webcamIndex}`;
+            });
+        }
+
+        function stopStream() {
+            fetch('/stop').then(() => {
+                document.getElementById('videoContainer').style.display = 'none';
+                document.getElementById('videoFeed').src = '';
+            });
+        }
+    </script>
+</head>
+<body>
+    <img id="logo" src="static/virtual_mouse.png" alt="Virtual AI Mouse Logo">
+    <h1>Virtual AI Mouse</h1>
+    <div id="controls">
+        <label for="webcamSelect">Choose Webcam:</label>
+        <select id="webcamSelect">
+            <option value="0">Webcam 0</option>
+            <option value="1">Webcam 1</option>
+            <!-- Add more options if you have more webcams -->
+        </select>
+        <button onclick="startStream()">Start</button>
+        <button id="stopButton" onclick="stopStream()">Stop</button>
+    </div>
+    <div id="videoContainer">
+        <img id="videoFeed" width="640" height="480">
+    </div>
+</body>
+</html>
